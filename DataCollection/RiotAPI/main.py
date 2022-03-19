@@ -1,6 +1,6 @@
 from riotwatcher import LolWatcher, ApiError
-
-lol_watcher = LolWatcher('RGAPI-04d043f6-dbbc-4e6b-819c-73f3c02ca08e')
+from typing import Dict
+lol_watcher = LolWatcher('RGAPI-c32fd404-5d2e-4780-8d1b-144d1dac38a4')
 
 my_region = 'na1'
 
@@ -9,20 +9,35 @@ print(me)
 
 my_ranked_stats = lol_watcher.league.by_summoner(my_region, me['id'])
 match_history = lol_watcher.match.matchlist_by_puuid("americas", me['puuid'])
-print()
-
 timeline = lol_watcher.match.timeline_by_match("americas", match_history[0])
-
-for i in timeline["info"]["frames"]:
-    print(i["timestamp"])
-    for j in i["participantFrames"]:
-
-        print(j, i["participantFrames"][j]["position"])
+data = lol_watcher.match.by_id("americas", match_history[0])
 
 
-# print(my_ranked_stats)
+def get_champion_id(match: Dict):
+    for i in range(10):
+        print(match['info']['participants'][i]['championId'])
 
-# First we get the latest version of the game from data dragon
+
+def get_player_name(timeline: Dict):
+    for player in timeline['metadata']['participants']:
+        # print(lol_watcher.league.by_id('NA1', player))
+        # print(player)
+        print(lol_watcher.summoner.by_puuid('na1', player)['name'])
+
+
+def get_frame(timeline: Dict):
+    for i in timeline["info"]["frames"]:
+        print(i["timestamp"])
+        for j in i["participantFrames"]:
+            print(j, i["participantFrames"][j]["position"])
+            print(j, i["participantFrames"][j]["totalGold"])
+            print(j, i["participantFrames"][j]["xp"])
+            print(j, i["participantFrames"][j]["damageStats"]["totalDamageDoneToChampions"])
+
+
+
+
+
 versions = lol_watcher.data_dragon.versions_for_region(my_region)
 champions_version = versions['n']['champion']
 
@@ -30,11 +45,7 @@ champions_version = versions['n']['champion']
 current_champ_list = lol_watcher.data_dragon.champions(champions_version)
 
 
-
-
 if __name__ == "__main__":
-    # print_newest_match(name="Sparysgah", region="NA")
-
     pass
 
 
