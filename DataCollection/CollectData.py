@@ -32,7 +32,12 @@ def collect_agame(playername: str) -> Dict:
                 player['name'] = player_names[i]
                 player['champion_id'] = champion_ids[i]
                 res = call_api(base_uri + player_names[i]).json()
-                player['elo'] = res['ranked']['avg']
+                if 'code' in res:
+                    if res['code'] == '101':
+                        player['elo'] = -1
+
+                else:
+                    player['elo'] = res['ranked']['avg']
                 data_dictionary[str(i)] = player
 
             return data_dictionary
