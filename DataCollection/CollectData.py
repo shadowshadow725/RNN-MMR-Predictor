@@ -39,11 +39,11 @@ def collect_agame(playername: str) -> Dict:
 
 
 if __name__ == "__main__":
-    # riot_api_key = input('input riot api key: ')
-    # starting_user = input('input the username of some '
-    #                       'random player that played ranked: ')
-    riot_api_key = 'RGAPI-9d17f8eb-6f44-42a4-b925-2e0c9bfc89f5'
-    starting_user = 'Sparysgah'
+    riot_api_key = input('input riot api key: ')
+    starting_user = input('input the username of some '
+                          'random player that played ranked: ')
+    # riot_api_key = 'RGAPI-9d17f8eb-6f44-42a4-b925-2e0c9bfc89f5'
+    # starting_user = 'Sparysgah'
     lol_watcher = LolWatcher(riot_api_key)
     if not os.path.exists('data'):
         os.makedirs('data')
