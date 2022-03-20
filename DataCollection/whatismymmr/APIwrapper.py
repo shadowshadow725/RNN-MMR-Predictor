@@ -6,7 +6,7 @@ base_uri = "https://na.whatismymmr.com/api/v1/summoner?name="
 
 
 @sleep_and_retry
-@limits(calls=30, period=60)
+@limits(calls=50, period=60)
 def call_api(url) -> requests.models.Response:
     headers = {
         'User-Agent': 'Windows:com.csc413.datacollection:v0.1'
