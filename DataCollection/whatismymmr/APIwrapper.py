@@ -12,9 +12,6 @@ def call_api(url) -> requests.models.Response:
         'User-Agent': 'Windows:com.csc413.datacollection:v0.1'
     }
     response = requests.get(url, headers=headers)
-    if response.status_code != 200:
-        print(response.json())
-        raise Exception('API response: {}'.format(response.status_code))
 
     return response
 
