@@ -10,7 +10,7 @@ my_region = 'na1'
 area = 'americas'
 base_uri = "https://na.whatismymmr.com/api/v1/summoner?name="
 lol_watcher = None
-data_points = 10
+data_points = 100
 
 
 def collect_agame(playername: str) -> Dict:
@@ -22,7 +22,7 @@ def collect_agame(playername: str) -> Dict:
         if data['info']['queueId'] == 420 and '12.5' in data['info']['gameVersion']:
             timeline = lol_watcher.match.timeline_by_match("americas", match_history[j])
             champion_ids = get_champion_id(data)
-            player_names = get_player_name(timeline)
+            player_names = get_player_name(timeline, lol_watcher)
             timeline = get_frame(timeline)
             data_dictionary = {}
 
