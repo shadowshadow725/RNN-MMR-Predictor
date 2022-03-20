@@ -12,7 +12,9 @@ def call_api(url) -> requests.models.Response:
         'User-Agent': 'Windows:com.csc413.datacollection:v0.1'
     }
     response = requests.get(url, headers=headers)
-
+    # cloudflare returning 503 for some reason 
+    while response.status_code == 503:
+        response = requests.get(url, headers=headers)
     return response
 
 
