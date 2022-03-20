@@ -6,7 +6,7 @@ base_uri = "https://na.whatismymmr.com/api/v1/summoner?name="
 
 
 @sleep_and_retry
-@limits(calls=59, period=60)
+@limits(calls=30, period=60)
 def call_api(url) -> requests.models.Response:
     response = requests.get(url)
     if response.status_code != 200:
