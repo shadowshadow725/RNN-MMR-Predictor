@@ -42,6 +42,7 @@ def collect_agame(playername: str) -> Dict:
             return data_dictionary
 
 
+
 if __name__ == "__main__":
     riot_api_key = input('input riot api key: ')
     starting_user = input('input the username of some '
@@ -52,17 +53,21 @@ if __name__ == "__main__":
     if not os.path.exists('data'):
         os.makedirs('data')
     next_user = starting_user
+    d = {}
     for _ in range(data_points):
-        d = collect_agame(next_user)
-        f = open('data/' + d['match_id'] + '.json', 'w')
-        js = json.dumps(d, indent=4)
 
-        try:
-            f.write(js)
-        except:
-            pass
+        d_cur = collect_agame(next_user)
+        if d_cur:
+            d = d_cur
+            f = open('data/' + d['match_id'] + '.json', 'w')
+            js = json.dumps(d, indent=4)
 
-        f.close()
+            try:
+                f.write(js)
+            except:
+                pass
+
+            f.close()
         next_user = d[str((datetime.now().microsecond % 10))]['name']
 
 
