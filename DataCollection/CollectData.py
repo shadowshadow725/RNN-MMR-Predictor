@@ -27,20 +27,19 @@ def collect_agame(playername: str) -> Dict:
             timeline = get_frame(timeline)
             data_dictionary = {}
             data_dictionary['match_id'] = match_history[j]
-            if len(player_names) != 10:
-                for i in range(10):
-                    player = {}
-                    player['timeline'] = timeline[i]
-                    player['name'] = player_names[i]
-                    player['champion_id'] = champion_ids[i]
-                    res = call_api(base_uri + player_names[i]).json()
-                    if 'ranked' in res:
-                        player['elo'] = res['ranked']['avg']
-                    else:
-                        player['elo'] = -1
-                    data_dictionary[str(i)] = player
+            for i in range(10):
+                player = {}
+                player['timeline'] = timeline[i]
+                player['name'] = player_names[i]
+                player['champion_id'] = champion_ids[i]
+                res = call_api(base_uri + player_names[i]).json()
+                if 'ranked' in res:
+                    player['elo'] = res['ranked']['avg']
+                else:
+                    player['elo'] = -1
+                data_dictionary[str(i)] = player
 
-                return data_dictionary
+            return data_dictionary
 
 
 
