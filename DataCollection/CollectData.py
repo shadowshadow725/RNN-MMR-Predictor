@@ -53,6 +53,7 @@ if __name__ == "__main__":
     if not os.path.exists('data'):
         os.makedirs('data')
     next_user = starting_user
+    candidate_users = []
     d = {}
     for _ in range(data_points):
 
@@ -61,14 +62,16 @@ if __name__ == "__main__":
             d = d_cur
             f = open('data/' + d['match_id'] + '.json', 'w')
             js = json.dumps(d, indent=4)
-
+            for j in range(10):
+                if j != next_user:
+                    candidate_users.append(d[str(j)]['name'])
             try:
                 f.write(js)
             except:
                 pass
 
             f.close()
-        next_user = d[str((datetime.now().microsecond % 10))]['name']
+        next_user = candidate_users.pop(randint(0, len(candidate_users)-1))
 
 
 
