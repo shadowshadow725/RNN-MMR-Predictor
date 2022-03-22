@@ -58,21 +58,26 @@ if __name__ == "__main__":
     for _ in range(data_points):
 
         d_cur = collect_agame(next_user)
-        if d_cur:
-            d = d_cur
-            f = open('data/' + d['match_id'] + '.json', 'w')
-            js = json.dumps(d, indent=4)
-            for j in range(10):
-                if j != next_user:
-                    candidate_users.append(d[str(j)]['name'])
-            try:
-                f.write(js)
-            except:
-                pass
+        try:
+            if d_cur:
+                d = d_cur
+                f = open('data/' + d['match_id'] + '.json', 'w')
+                js = json.dumps(d, indent=4)
+                for j in range(10):
+                    if j != next_user:
+                        candidate_users.append(d[str(j)]['name'])
+                try:
+                    f.write(js)
+                except:
+                    pass
 
-            f.close()
+                f.close()
+        except:
+            pass
         next_user = candidate_users.pop(randint(0, len(candidate_users)-1))
-
+        if len(candidate_users) > 100:
+            candidate_users = candidate_users[::2]
+            
 
 
 
