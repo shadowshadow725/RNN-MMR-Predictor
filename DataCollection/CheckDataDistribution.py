@@ -6,15 +6,10 @@ import matplotlib.pyplot as plt
 
 
 def average_mmr(d: Dict) -> int:
-    s = 0
-    dem = 0
-
     for j in range(10):
 
-        if d[str(j)]['elo'] and d[str(j)]['elo'] > 0:
-            s += d[str(j)]['elo']
-            dem += 1
-    return s/dem
+        if d['elo']:
+            return sum(d['elo'])/len(d['elo'])
 
 
 if __name__ == "__main__":
