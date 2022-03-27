@@ -27,17 +27,18 @@ def collect_agame(playername: str) -> Dict:
             timeline = get_frame(timeline)
             data_dictionary = {}
             data_dictionary['match_id'] = match_history[j]
+            data_dictionary['timeline'] = timeline
+            data_dictionary['name'] = player_names
+            data_dictionary['champion_id'] = champion_ids
+            player = []
             for i in range(10):
-                player = {}
-                player['timeline'] = timeline[i]
-                player['name'] = player_names[i]
-                player['champion_id'] = champion_ids[i]
+
                 res = call_api(base_uri + player_names[i]).json()
                 if 'ranked' in res:
-                    player['elo'] = res['ranked']['avg']
+                    player.append(res['ranked']['avg'])
                 else:
-                    player['elo'] = -1
-                data_dictionary[str(i)] = player
+                    player.append(-1)
+            data_dictionary['elo'] = player
 
             return data_dictionary
 
@@ -65,7 +66,7 @@ if __name__ == "__main__":
                 js = json.dumps(d, indent=4)
                 for j in range(10):
                     if j != next_user:
-                        candidate_users.append(d[str(j)]['name'])
+                        candidate_users.extend(d['name'])
                 try:
                     f.write(js)
                 except:
@@ -77,7 +78,7 @@ if __name__ == "__main__":
         next_user = candidate_users.pop(randint(0, len(candidate_users)-1))
         if len(candidate_users) > 100:
             candidate_users = candidate_users[::2]
-            
+
 
 
 
