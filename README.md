@@ -3,10 +3,12 @@
 ## Introduction
 <!-- What deep learning model are you building? We are looking for a clear and concise description that uses standard deep learning terminology. Clearly describe the type of task that you are solving, and what your input/outputs are. -->
 
+MMR Predictor is a < .. > that does multi-class classification.
+
 ## Model
 
 ### Model Figure
-<!-- A figure/diagram of the model architecture that demonstrates understanding of the steps involved in computing the forward pass. We are looking to see if you understand the steps involved in the model computation (i.e. are you treating the model as a black box or do you understand what it’s doing?) -- >
+<!-- A figure/diagram of the model architecture that demonstrates understanding of the steps involved in computing the forward pass. We are looking to see if you understand the steps involved in the model computation (i.e. are you treating the model as a black box or do you understand what it’s doing?) -->
 
 ### Model Parameters
 <!-- Count the number of parameters in the model, and a description of where the parameters come from. Again, we are looking to see if you understand what the model is doing, and what parameters are being tuned. -->
@@ -21,12 +23,23 @@
 
 ### Data Source
 <!-- Describe the source of your data. -->
+We retrieved the match data from the official League of Legends API allowed under www.riotgames.com/en/legal and the ELO ratings of all players from na.whatismymmr.com API allowed under Creative Commons Attribution 4.0 International License. 
+
 
 ### Data Transformation
 <!-- Describe how you transformed the data, i.e. the steps you took to turn the data from what you downloaded, to something that a neural network can use as input. We are looking for a concise description that has just enough information for another person to replicate your process.-->
 
+( Need description from the data collection script !! )
+
+From each of the JSON file, we extract `timeline` and `elo` to be our input and label data respectively. The array `timeline` consists of the 10 players data (position, gold, experience, damage dealt) on each minute of the game appended together. The array `elo` contains 10 elo ratings of each player in the game. We take the average of the 10 values and classify it to one of the seven classes we have based on index (Iron, Bronze, Silver, Gold, Platinum, Diamond, Master/Grandmaster/Challenger). The class (0-6) is the label of the datapoint.
+
+
 ### Data Split
 <!-- If appropriate to your project, describe how the train/validation/test set was split. Note that splitting strategy is not always straightforward, so we are looking to see a split that can be justified. -->
+Training Data: 60%
+Validation Data: 20%
+Test Data:  20%
+<!-- Missing justification -->
 
 ## Training Curve
 <!--The training curve of your final model. We are looking for a curve that shows both training and validation performance (if applicable). Your training curve should look reasonable for the problem that you are solving.-->
