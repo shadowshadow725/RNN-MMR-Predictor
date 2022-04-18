@@ -5,16 +5,47 @@
 
 MMR Predictor is a < .. > that does multi-class classification.
 
+Input data point description:
+    Every data point would consist of each player’s position at every 15 minutes and the character that 
+    the player is using. So each player would be represented as a vector of [gold, exp, damage, x, y]
+    where gold will be the player gold at that time, exp represents the player experience at that time,
+    damage represents the player damage to the enemy at that time, the character id would represent the 
+    game character that the player chose, and x, y would be the positional data. And there are 10 players 
+    per game in total. Therefore, the dimension of each input unit is 5*10=50. And the dimension of a 
+    single data point is (15,50).
+
+model design description:
+    Since we want to make predictions about a sequence, we decided to use a LSTM architecture of the 
+    recurrent neural network with a maximum length of 15-time frames with each time frame taken at an 
+    interval of 1 minute. We choose to use 64 hidden units. And we apply LSTM from pytorch. At the end of 
+    the model of our network, we would use an MLP layer to estimate the average MMR of the match. We 
+    start with 15 fully connected layers. 
+
+Output data point description:
+    Our target would be a one hot vector with dimension of 7 representing the average ELO rating of all 
+    players in a game. Our model would adjust its output to this target match’s average ELO. According to 
+    the matchmaking system of the game League of Legends, there are 6 divisions with 4 tiers and 3 
+    divisions with 1 tier with every tier representing a range of the ELO rating such as 1200-1270, 
+    1270-1330 etc. Therefore, there are 27 tires in total. Thus, we would consider the prediction as a 
+    correct prediction if it is in the target ELO range. 
+
+
 ## Model
 
 ### Model Figure
 <!-- A figure/diagram of the model architecture that demonstrates understanding of the steps involved in computing the forward pass. We are looking to see if you understand the steps involved in the model computation (i.e. are you treating the model as a black box or do you understand what it’s doing?) -->
 
+![Alt text](/image_figure.png?raw=true)
+
 ### Model Parameters
 <!-- Count the number of parameters in the model, and a description of where the parameters come from. Again, we are looking to see if you understand what the model is doing, and what parameters are being tuned. -->
+There are 15 input units in total. Then there are 15 hidden units corresponding to 15 input units. And we 
+have 15 output units. Overall, there are 45 parameters in the model.
+
 
 ### Examples
 <!-- Examples of how the model performs on two actual examples from the test set: one successful and one unsuccessful. -->
+
 
 ## Data
 
@@ -75,5 +106,6 @@ An ethical problem will arise when our model is misused to evaluate individual p
 - Wrote data processing script 
 - ..
 
-1004883860 - Zhixuan Yan (_@mail.utoronto.ca)
+1004883860 - Zhixuan Yan (zhixuan.yan@mail.utoronto.ca)
+- wrote README.md
 - ..
