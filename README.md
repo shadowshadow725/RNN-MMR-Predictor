@@ -3,16 +3,45 @@
 ## Introduction
 <!-- What deep learning model are you building? We are looking for a clear and concise description that uses standard deep learning terminology. Clearly describe the type of task that you are solving, and what your input/outputs are. -->
 
+MMR Predictor is a recurrent neural network model that uses LSTM architecture to do a multi-class classification task. In this model, we introduce 7 classes of ELO rating:
+
+| No  | Elo Class                     | MMR Rating  |
+| --- | ---                           | ---         |
+| 0   | Iron                          | 0 - 579     |
+| 1   | Bronze                        | 579 - 1207  |
+| 2   | Silver                        | 1207 - 1619 |
+| 3   | Gold                          | 1619 - 1980 |
+| 4   | Platinum                      | 1980 - 2329 |
+| 5   | Diamond                       | 2329 - 2729 |
+| 6   | Master/Grandmaster/Challenger | 2729 - 3386 |
+
+The input to the model would consist of each player's data (there are 10 players in a match) at every 15 minutes. Each player would be represented as a vector of `[x, y, Gold, Exp, Dmg]` where: 
+1. `x` represent the x position,
+2. `y` represent the y position,
+3. `Gold` represents the amount of the in-match currency,
+4. `Exp` represents the amount of experience, and
+5. `Dmg` represents the amount of damage dealt to enemy players in one specific timeframe.
+
+The dimension of each input unit is 5 $\times$ 10 = 50, and so the dimension of a single data point is (15, 50). On the other hand, the input label will be the class of the average ELO ratings of 10 players in a game represented in one-hot vector with size 7. 
+
+Since we want to make predictions based on a sequence, we decided to use a LSTM architecture of the recurrent neural network with a maximum length of 15-time frames with each time frame taken at an interval of 1 minute. We will be using PyTorch's LSTM with 64 hidden units. At the end of the model of our network, we use a Multilayer Perceptron layer to output the probability distribution across 7 classes we defined above. We start with 15 fully connected layers. 
+
 ## Model
 
 ### Model Figure
-<!-- A figure/diagram of the model architecture that demonstrates understanding of the steps involved in computing the forward pass. We are looking to see if you understand the steps involved in the model computation (i.e. are you treating the model as a black box or do you understand what it’s doing?) -- >
+<!-- A figure/diagram of the model architecture that demonstrates understanding of the steps involved in computing the forward pass. We are looking to see if you understand the steps involved in the model computation (i.e. are you treating the model as a black box or do you understand what it’s doing?) -->
+
+![Alt text](/image_figure.png?raw=true)
 
 ### Model Parameters
 <!-- Count the number of parameters in the model, and a description of where the parameters come from. Again, we are looking to see if you understand what the model is doing, and what parameters are being tuned. -->
+There are 15 input units in total. Then there are 15 hidden units corresponding to 15 input units. And we 
+have 15 output units. Overall, there are 45 parameters in the model.
+
 
 ### Examples
 <!-- Examples of how the model performs on two actual examples from the test set: one successful and one unsuccessful. -->
+
 
 ## Data
 
@@ -21,12 +50,23 @@
 
 ### Data Source
 <!-- Describe the source of your data. -->
+We retrieved the match data from the official League of Legends API allowed under www.riotgames.com/en/legal and the ELO ratings of all players from na.whatismymmr.com API allowed under Creative Commons Attribution 4.0 International License. 
+
 
 ### Data Transformation
 <!-- Describe how you transformed the data, i.e. the steps you took to turn the data from what you downloaded, to something that a neural network can use as input. We are looking for a concise description that has just enough information for another person to replicate your process.-->
 
+( Need description from the data collection script !! )
+
+From each of the JSON file, we extract `timeline` and `elo` to be our input and label data respectively. The array `timeline` consists of the 10 players data (position, gold, experience, damage dealt) on each minute of the game appended together. The array `elo` contains 10 elo ratings of each player in the game. We take the average of the 10 values and classify it to one of the seven classes we have based on index (Iron, Bronze, Silver, Gold, Platinum, Diamond, Master/Grandmaster/Challenger). The class (0-6) is the label of the datapoint.
+
+
 ### Data Split
 <!-- If appropriate to your project, describe how the train/validation/test set was split. Note that splitting strategy is not always straightforward, so we are looking to see a split that can be justified. -->
+Training Data: 60%
+Validation Data: 20%
+Test Data:  20%
+<!-- Missing justification -->
 
 ## Training Curve
 <!--The training curve of your final model. We are looking for a curve that shows both training and validation performance (if applicable). Your training curve should look reasonable for the problem that you are solving.-->
@@ -62,5 +102,6 @@ An ethical problem will arise when our model is misused to evaluate individual p
 - Wrote data processing script 
 - ..
 
-1004883860 - Zhixuan Yan (_@mail.utoronto.ca)
+1004883860 - Zhixuan Yan (zhixuan.yan@mail.utoronto.ca)
+- wrote README.md
 - ..
