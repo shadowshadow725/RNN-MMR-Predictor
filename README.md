@@ -60,7 +60,7 @@ We retrieved the match data from the official League of Legends API allowed unde
 
 We retrieved 10,000 datapoints from the sources, and only 8500 of them can be considered as valid inputs to the model. As you can see from the two histograms we constructed from the valid inputs, the data has a unimodal distribution, with Silver (class 2) as the most common ELO class, which follow the official rank distribution found at www.leagueofgraphs.com/rankings/rank-distribution/na.
 
-![Alt text](/data_distribution.png?raw=true)
+![Alt text](/README_figures/data_distribution.png?raw=true)
 ![Alt text](/README_figures/mmr_histogram.png?raw=true)
 
 ### Data Transformation
@@ -81,13 +81,13 @@ To make sure that all the input data have the same length, we only take the firs
 
 ## Training Curve
 <!--The training curve of your final model. We are looking for a curve that shows both training and validation performance (if applicable). Your training curve should look reasonable for the problem that you are solving.-->
-![Alt text](/loss_accuracy_graph.png?raw=true)
+![Alt text](/README_figures/loss_accuracy_graph.png?raw=true)
 
 ## Hyperparameter Tuning
 <!--A justification that your implemented method performed reasonably, given the difficulty of the problem—or a hypothesis for why it doesn’t. This is extremely important. We are looking for an interpretation of the result. You may want to refer to your data summary and hyperparameter choices to make your argument. -->
 
 We used the initial training parameter of 64 hidden units a batch size of 64 and a learning rate of 0.07. We first tried tuning the number of hidden units since this should have the most effect on the model. We have tried values up to 126 hidden units and seen no significant improvement to our model. Than we tried tuning the learning rate. We increased the training rate from 0.07 to 0.1 and we found improvement in terms of training speed. The number of iterations where we reached final accuracy went from 50 to about 30 iterations. During the above tuning we also decided to lower our batch size from 64 to 32 to see better stability in the training and validation accuracy. Looking at the prediction vs the label we saw that out model is predicting the class 2 which is the mostly common class in our data.
-![Alt text](/training_accuracy.png?raw=true)
+![Alt text](/README_figures/training_accuracy.png?raw=true)
 
 ## Quantitative and Qualitative Results
 <!-- Describe the quantitative and qualitative results. You may choose to use a table or figure to aid in your description. We are looking for both a clear presentation, and a result that makes sense given your data summary. (As an extreme example, you should not have a result that performs worse than a model that, say, predicts the most common class.)-->
