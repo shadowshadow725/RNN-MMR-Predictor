@@ -3,32 +3,28 @@
 ## Introduction
 <!-- What deep learning model are you building? We are looking for a clear and concise description that uses standard deep learning terminology. Clearly describe the type of task that you are solving, and what your input/outputs are. -->
 
-MMR Predictor is a < .. > that does multi-class classification.
+MMR Predictor is a recurrent neural network model that uses LSTM architecture to do a multi-class classification task. In this model, we introduce 7 classes of ELO rating:
 
-Input data point description:
-    Every data point would consist of each player’s position at every 15 minutes and the character that 
-    the player is using. So each player would be represented as a vector of [gold, exp, damage, x, y]
-    where gold will be the player gold at that time, exp represents the player experience at that time,
-    damage represents the player damage to the enemy at that time, the character id would represent the 
-    game character that the player chose, and x, y would be the positional data. And there are 10 players 
-    per game in total. Therefore, the dimension of each input unit is 5*10=50. And the dimension of a 
-    single data point is (15,50).
+| No  | Elo Class                     | MMR Rating  |
+| --- | ---                           | ---         |
+| 0   | Iron                          | 0 - 579     |
+| 1   | Bronze                        | 579 - 1207  |
+| 2   | Silver                        | 1207 - 1619 |
+| 3   | Gold                          | 1619 - 1980 |
+| 4   | Platinum                      | 1980 - 2329 |
+| 5   | Diamond                       | 2329 - 2729 |
+| 6   | Master/Grandmaster/Challenger | 2729 - 3386 |
 
-model design description:
-    Since we want to make predictions about a sequence, we decided to use a LSTM architecture of the 
-    recurrent neural network with a maximum length of 15-time frames with each time frame taken at an 
-    interval of 1 minute. We choose to use 64 hidden units. And we apply LSTM from pytorch. At the end of 
-    the model of our network, we would use an MLP layer to estimate the average MMR of the match. We 
-    start with 15 fully connected layers. 
+The input to the model would consist of each player's data (there are 10 players in a match) at every 15 minutes. Each player would be represented as a vector of `[x, y, Gold, Exp, Dmg]` where: 
+1. `x` represent the x position,
+2. `y` represent the y position,
+3. `Gold` represents the amount of the in-match currency,
+4. `Exp` represents the amount of experience, and
+5. `Dmg` represents the amount of damage dealt to enemy players in one specific timeframe.
 
-Output data point description:
-    Our target would be a one hot vector with dimension of 7 representing the average ELO rating of all 
-    players in a game. Our model would adjust its output to this target match’s average ELO. According to 
-    the matchmaking system of the game League of Legends, there are 6 divisions with 4 tiers and 3 
-    divisions with 1 tier with every tier representing a range of the ELO rating such as 1200-1270, 
-    1270-1330 etc. Therefore, there are 27 tires in total. Thus, we would consider the prediction as a 
-    correct prediction if it is in the target ELO range. 
+The dimension of each input unit is 5 $\times$ 10 = 50, and so the dimension of a single data point is (15, 50). On the other hand, the input label will be the class of the average ELO ratings of 10 players in a game represented in one-hot vector with size 7. 
 
+Since we want to make predictions based on a sequence, we decided to use a LSTM architecture of the recurrent neural network with a maximum length of 15-time frames with each time frame taken at an interval of 1 minute. We will be using PyTorch's LSTM with 64 hidden units. At the end of the model of our network, we use a Multilayer Perceptron layer to output the probability distribution across 7 classes we defined above. We start with 15 fully connected layers. 
 
 ## Model
 
