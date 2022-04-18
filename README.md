@@ -15,16 +15,16 @@ MMR Predictor is a recurrent neural network model that uses LSTM architecture to
 | 5     | Diamond                       | 2329 - 2729 |
 | 6     | Master/Grandmaster/Challenger | 2729 - 3386 |
 
-The input to the model would consist of each player's data (there are 10 players in a match) at every 15 minutes. Each player would be represented as a vector of `[x, y, Gold, Exp, Dmg]` where: 
+The input to the model would consist of each player's data (there are 10 players in a match) at every 15 minutes. Each player would be represented as a vector of `[x, y, Gold, Exp, Dmg]` where:
 1. `x` represent the x position,
 2. `y` represent the y position,
 3. `Gold` represents the amount of the in-match currency,
 4. `Exp` represents the amount of experience, and
 5. `Dmg` represents the total amount of damage dealt to enemy players in one specific timeframe.
 
-The dimension of each input unit is 5 $\times$ 10 = 50, and so the dimension of a single data point is (15, 50). On the other hand, the input label will be the class of the average ELO ratings of 10 players in a game represented in one-hot vector with size 7. 
+The dimension of each input unit is 5 $\times$ 10 = 50, and so the dimension of a single data point is (15, 50). On the other hand, the input label will be the class of the average ELO ratings of 10 players in a game represented in one-hot vector with size 7.
 
-Since we want to make predictions based on a sequence, we decided to use a LSTM architecture of the recurrent neural network with a maximum length of 15-time frames with each time frame taken at an interval of 1 minute. We will be using PyTorch's LSTM with 64 hidden units. At the end of the model of our network, we use a Multilayer Perceptron layer to output the probability distribution across 7 classes we defined above. We start with 15 fully connected layers. 
+Since we want to make predictions based on a sequence, we decided to use a LSTM architecture of the recurrent neural network with a maximum length of 15-time frames with each time frame taken at an interval of 1 minute. We will be using PyTorch's LSTM with 64 hidden units. At the end of the model of our network, we use a Multilayer Perceptron layer to output the probability distribution across 7 classes we defined above. We start with 15 fully connected layers.
 
 ## Model
 
@@ -35,7 +35,7 @@ Since we want to make predictions based on a sequence, we decided to use a LSTM 
 
 ### Model Parameters
 <!-- Count the number of parameters in the model, and a description of where the parameters come from. Again, we are looking to see if you understand what the model is doing, and what parameters are being tuned. -->
-There are 15 input units in total. Then there are 15 hidden units corresponding to 15 input units. And we 
+There are 15 input units in total. Then there are 15 hidden units corresponding to 15 input units. And we
 have 15 output units. Overall, there are 45 parameters in the model.
 
 
@@ -47,7 +47,7 @@ target tensor([[2]], device='cuda:0')
 prediction tensor([[2]], device='cuda:0')
 target tensor([[5]], device='cuda:0')
 
-Please see the jupyters notebook for for details  
+Please see the Jupyters notebook for details  
 
 ## Data
 
@@ -58,7 +58,7 @@ We retrieved the match data from the official League of Legends API allowed unde
 ### Data Summary
 <!-- Provide summary statistics of your data to help interpret your results, similar to in the proposal. Please review the feedback provided in the proposal for some guidance on what information is helpful for interpreting your model behaviour.-->
 
-We retrieved 10,000 datapoints from the sources, and only 8500 of them can be considered as valid inputs to the model. As you can see from the two histograms we constructed from the valid inputs, the data has a unimodal distribution, with Silver (class 2) as the most common ELO class, which follow the official rank distribution found at www.leagueofgraphs.com/rankings/rank-distribution/na. 
+We retrieved 10,000 datapoints from the sources, and only 8500 of them can be considered as valid inputs to the model. As you can see from the two histograms we constructed from the valid inputs, the data has a unimodal distribution, with Silver (class 2) as the most common ELO class, which follow the official rank distribution found at www.leagueofgraphs.com/rankings/rank-distribution/na.
 
 ![Alt text](/data_distribution.png?raw=true)
 ![Alt text](/README_figures/mmr_histogram.png?raw=true)
@@ -86,30 +86,30 @@ To make sure that all the input data have the same length, we only take the firs
 ## Hyperparameter Tuning
 <!--A justification that your implemented method performed reasonably, given the difficulty of the problem—or a hypothesis for why it doesn’t. This is extremely important. We are looking for an interpretation of the result. You may want to refer to your data summary and hyperparameter choices to make your argument. -->
 
-We used the intial training parameter of 64 hidden units a batch size of 64 and a learning rate of 0.07. We first tried tuning the number of hidden units since this should have the most effect on the model. We have tried values up to 126 hidden units and seen no significant improvement to our model. Than we tried tuning the learning rate. We increased the training rate from 0.07 to 0.1 and we found improvement in terms of training speed. The number of iterations where we reached final accuracy went from 50 to about 30 iterations. During the above tuning we also decided to lower our batch size from 64 to 32 to see better stability in the training and validation accuracy. Looking at the prediction vs the label we saw that out model is predicting the class 2 which is the mosty common class in our data. 
+We used the initial training parameter of 64 hidden units a batch size of 64 and a learning rate of 0.07. We first tried tuning the number of hidden units since this should have the most effect on the model. We have tried values up to 126 hidden units and seen no significant improvement to our model. Than we tried tuning the learning rate. We increased the training rate from 0.07 to 0.1 and we found improvement in terms of training speed. The number of iterations where we reached final accuracy went from 50 to about 30 iterations. During the above tuning we also decided to lower our batch size from 64 to 32 to see better stability in the training and validation accuracy. Looking at the prediction vs the label we saw that out model is predicting the class 2 which is the mostly common class in our data.
 ![Alt text](/training_accuracy.png?raw=true)
 
 ## Quantitative and Qualitative Results
 <!-- Describe the quantitative and qualitative results. You may choose to use a table or figure to aid in your description. We are looking for both a clear presentation, and a result that makes sense given your data summary. (As an extreme example, you should not have a result that performs worse than a model that, say, predicts the most common class.)-->
 
-Looking at the result we can see the model tries to predict the most common class in our training data. Which I think because the data we collected shows a normal distribution center at class 2 the model found it is better to use class 2 as a prediction. Maybe if the data is in an uniform distribution we would see better training results. Another reason that caused our model to predict the most common target in our training data is the lack of difference between the different classes. The data we collection on show statistics from minute to minute (limitation from the official Riot API) so the model would have difficulty spotting patterns in gameplay since our training data lacks detail. 
+Looking at the result we can see the model tries to predict the most common class in our training data. Which I think because the data we collected shows a normal distribution center at class 2 the model found it is better to use class 2 as a prediction. Maybe if the data is in an uniform distribution we would see better training results. Another reason that caused our model to predict the most common target in our training data is the lack of difference between the different classes. The data we collection on show statistics from minute to minute (limitation from the official Riot API) so the model would have difficulty spotting patterns in gameplay since our training data lacks detail.
 
 ### Quantitative Measures
 <!-- A description and justification of the quantitative measure that you are using to evaluate your results. For some problems this will be straightforward. For others, please justify the measure that you chose. -->
-We don't think our model provides meanful results since the model is only outputing the most common target in our data. 
+We don't think our model provides meaningful results since the model is only outputting the most common target in our data.
 
 
 ## Justification of Results
 <!-- A justification that your implemented method performed reasonably, given the difficulty of the problem—or a hypothesis for why it doesn’t. This is extremely important. We are looking for an interpretation of the result. You may want to refer to your data summary and hyperparameter choices to make your argument. -->
 
-Looking at the result I don't think our model performs well. I think this is because the lack of difference in training data between high vs low ranked players. Also our training data lacked detail since it is limited by the official Riot API and the model failed to distinguish between high ranked game play from low ranked gameplay. The training data for all ranks showed a similar trend therefore our model is unable to distinguish between high and low elo players. 
+Looking at the result I don't think our model performs well. I think this is because the lack of difference in training data between high vs low ranked players. Also our training data lacked detail since it is limited by the official Riot API and the model failed to distinguish between high ranked game play from low ranked gameplay. The training data for all ranks showed a similar trend therefore our model is unable to distinguish between high and low ELO players.
 
 ## Ethical Consideration
 We believe that the RNN model we created can be used for both public and professional match evaluation. The evaluation can be done by comparing the ELO rating generated by our model to each player actual ELO rating. From the comparison, we can evaluate the match gameplay quality; whether the performance of **all the players** reflect the average level of ELO rating they are in right now.  
 
 The prediction is generated by taking all of the 10 players in a match as an input; this means the value generated is a generalization of 10 players' performance which is not an accurate representation of individual performance. A player may have good individual performance in a match but the model says otherwise (by generating much lower ELO rating than the average of 10 players' ELO ratings), and vice versa.
 
-An ethical problem will arise when our model is misused to evaluate individual performance, especially in professional scenes. The misinterpretation of the generated ELO rating can lead to cyberbullying targeted to specific professional players or teams. A player/team can be a target for cyberbullying because the model (indirectly) rated their latest match poorly by generating low ELO rating below what is expected from professional players. Therefore, we emphasize the model's purpose as a **match evaluation** tool and **not** an individual evaluation tool. 
+An ethical problem will arise when our model is misused to evaluate individual performance, especially in professional scenes. The misinterpretation of the generated ELO rating can lead to cyberbullying targeted to specific professional players or teams. A player/team can be a target for cyberbullying because the model (indirectly) rated their latest match poorly by generating low ELO rating below what is expected from professional players. Therefore, we emphasize the model's purpose as a **match evaluation** tool and **not** an individual evaluation tool.
 
 ## Authors
 
@@ -121,10 +121,10 @@ An ethical problem will arise when our model is misused to evaluate individual p
 1005426549 - Xinhao Hou (xinhao.hou@mail.utoronto.ca)
 - Created the GitHub repository
 - Wrote and run data collection script (DataCollection folder)
-- Wrote data processing script 
+- Wrote data processing script
 - Hyperparameter Tuning
 
 1004883860 - Zhixuan Yan (zhixuan.yan@mail.utoronto.ca)
 - Wrote README.md
 - Model Figures
-- Data processing 
+- Data processing
