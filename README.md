@@ -126,5 +126,6 @@ An ethical problem will arise when our model is misused to evaluate individual p
 
 1004883860 - Zhixuan Yan (zhixuan.yan@mail.utoronto.ca)
 - Wrote README.md
-- Model Figures
+- Introduction and Model
 - Data processing
+- Fix issues with the model
