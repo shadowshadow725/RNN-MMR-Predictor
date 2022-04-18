@@ -42,6 +42,12 @@ have 15 output units. Overall, there are 45 parameters in the model.
 ### Examples
 <!-- Examples of how the model performs on two actual examples from the test set: one successful and one unsuccessful. -->
 
+prediction tensor([[2]], device='cuda:0')
+target tensor([[2]], device='cuda:0')
+prediction tensor([[2]], device='cuda:0')
+target tensor([[5]], device='cuda:0')
+
+Please see the jupyters notebook for for details  
 
 ## Data
 
@@ -56,8 +62,6 @@ We retrieved the match data from the official League of Legends API allowed unde
 ### Data Transformation
 <!-- Describe how you transformed the data, i.e. the steps you took to turn the data from what you downloaded, to something that a neural network can use as input. We are looking for a concise description that has just enough information for another person to replicate your process.-->
 
-( Need description from the data collection script !! )
-
 From each of the JSON file, we extract `timeline` and `elo` to be our input and label data respectively. The array `timeline` consists of the 10 players data (position, gold, experience, damage dealt) on each minute of the game appended together. The array `elo` contains 10 elo ratings of each player in the game. We take the average of the 10 values and classify it to one of the seven classes we have based on index (Iron, Bronze, Silver, Gold, Platinum, Diamond, Master/Grandmaster/Challenger). The class (0-6) is the label of the datapoint.
 
 
@@ -70,11 +74,13 @@ Test Data:  20%
 
 ## Training Curve
 <!--The training curve of your final model. We are looking for a curve that shows both training and validation performance (if applicable). Your training curve should look reasonable for the problem that you are solving.-->
+![Alt text](/loss_accuracy_graph.png?raw=true)
 
 ## Hyperparameter Tuning
 <!--A justification that your implemented method performed reasonably, given the difficulty of the problem—or a hypothesis for why it doesn’t. This is extremely important. We are looking for an interpretation of the result. You may want to refer to your data summary and hyperparameter choices to make your argument. -->
 
 We used the intial training parameter of 64 hidden units a batch size of 64 and a learning rate of 0.07. We first tried tuning the number of hidden units since this should have the most effect on the model. We have tried values up to 126 hidden units and seen no significant improvement to our model. Than we tried tuning the learning rate. We increased the training rate from 0.07 to 0.1 and we found improvement in terms of training speed. The number of iterations where we reached final accuracy went from 50 to about 30 iterations. During the above tuning we also decided to lower our batch size from 64 to 32 to see better stability in the training and validation accuracy. Looking at the prediction vs the label we saw that out model is predicting the class 2 which is the mosty common class in our data. 
+![Alt text](/training_accuracy.png?raw=true)
 
 ## Quantitative and Qualitative Results
 <!-- Describe the quantitative and qualitative results. You may choose to use a table or figure to aid in your description. We are looking for both a clear presentation, and a result that makes sense given your data summary. (As an extreme example, you should not have a result that performs worse than a model that, say, predicts the most common class.)-->
@@ -83,6 +89,8 @@ Looking at the result we can see the model tries to predict the most common clas
 
 ### Quantitative Measures
 <!-- A description and justification of the quantitative measure that you are using to evaluate your results. For some problems this will be straightforward. For others, please justify the measure that you chose. -->
+We don't think our model provides meanful results since the model is only outputing the most common target in our data. 
+
 
 ## Justification of Results
 <!-- A justification that your implemented method performed reasonably, given the difficulty of the problem—or a hypothesis for why it doesn’t. This is extremely important. We are looking for an interpretation of the result. You may want to refer to your data summary and hyperparameter choices to make your argument. -->
@@ -100,14 +108,16 @@ An ethical problem will arise when our model is misused to evaluate individual p
 
 1005434558 - Josh Alexander (josh.alexander@mail.utoronto.ca)
 - Put README.md together
-- ..
+- Fixed some issue with the data processing
+- Ethical Consideration
 
-1005426549 - Xinhao Hou (_@mail.utoronto.ca)
+1005426549 - Xinhao Hou (xinhao.hou@mail.utoronto.ca)
 - Created the GitHub repository
-- Wrote and run data collection script <!-- may be better if this replaced by the actual filename -->
+- Wrote and run data collection script (DataCollection folder)
 - Wrote data processing script 
-- ..
+- Hyperparameter Tuning
 
 1004883860 - Zhixuan Yan (zhixuan.yan@mail.utoronto.ca)
 - wrote README.md
-- ..
+- Model Figures
+- Data processing 
