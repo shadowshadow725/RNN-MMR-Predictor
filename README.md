@@ -42,12 +42,18 @@ have 15 output units. Overall, there are 45 parameters in the model.
 ### Examples
 <!-- Examples of how the model performs on two actual examples from the test set: one successful and one unsuccessful. -->
 
+prediction tensor([[2]], device='cuda:0')
+target tensor([[2]], device='cuda:0')
+prediction tensor([[2]], device='cuda:0')
+target tensor([[5]], device='cuda:0')
+
+Please see the jupyters notebook for for details  
 
 ## Data
 
 ### Data Summary
 <!-- Provide summary statistics of your data to help interpret your results, similar to in the proposal. Please review the feedback provided in the proposal for some guidance on what information is helpful for interpreting your model behaviour.-->
-
+![Alt text](/data_distribution.png?raw=true)
 ### Data Source
 <!-- Describe the source of your data. -->
 We retrieved the match data from the official League of Legends API allowed under www.riotgames.com/en/legal and the ELO ratings of all players from na.whatismymmr.com API allowed under Creative Commons Attribution 4.0 International License. 
@@ -55,8 +61,6 @@ We retrieved the match data from the official League of Legends API allowed unde
 
 ### Data Transformation
 <!-- Describe how you transformed the data, i.e. the steps you took to turn the data from what you downloaded, to something that a neural network can use as input. We are looking for a concise description that has just enough information for another person to replicate your process.-->
-
-( Need description from the data collection script !! )
 
 From each of the JSON file, we extract `timeline` and `elo` to be our input and label data respectively. The array `timeline` consists of the 10 players data (position, gold, experience, damage dealt) on each minute of the game appended together. The array `elo` contains 10 elo ratings of each player in the game. We take the average of the 10 values and classify it to one of the seven classes we have based on index (Iron, Bronze, Silver, Gold, Platinum, Diamond, Master/Grandmaster/Challenger). The class (0-6) is the label of the datapoint.
 
@@ -70,18 +74,28 @@ Test Data:  20%
 
 ## Training Curve
 <!--The training curve of your final model. We are looking for a curve that shows both training and validation performance (if applicable). Your training curve should look reasonable for the problem that you are solving.-->
+![Alt text](/loss_accuracy_graph.png?raw=true)
 
 ## Hyperparameter Tuning
 <!--A justification that your implemented method performed reasonably, given the difficulty of the problem—or a hypothesis for why it doesn’t. This is extremely important. We are looking for an interpretation of the result. You may want to refer to your data summary and hyperparameter choices to make your argument. -->
 
+We used the intial training parameter of 64 hidden units a batch size of 64 and a learning rate of 0.07. We first tried tuning the number of hidden units since this should have the most effect on the model. We have tried values up to 126 hidden units and seen no significant improvement to our model. Than we tried tuning the learning rate. We increased the training rate from 0.07 to 0.1 and we found improvement in terms of training speed. The number of iterations where we reached final accuracy went from 50 to about 30 iterations. During the above tuning we also decided to lower our batch size from 64 to 32 to see better stability in the training and validation accuracy. Looking at the prediction vs the label we saw that out model is predicting the class 2 which is the mosty common class in our data. 
+![Alt text](/training_accuracy.png?raw=true)
+
 ## Quantitative and Qualitative Results
 <!-- Describe the quantitative and qualitative results. You may choose to use a table or figure to aid in your description. We are looking for both a clear presentation, and a result that makes sense given your data summary. (As an extreme example, you should not have a result that performs worse than a model that, say, predicts the most common class.)-->
 
+Looking at the result we can see the model tries to predict the most common class in our training data. Which I think because the data we collected shows a normal distribution center at class 2 the model found it is better to use class 2 as a prediction. Maybe if the data is in an uniform distribution we would see better training results. Another reason that caused our model to predict the most common target in our training data is the lack of difference between the different classes. The data we collection on show statistics from minute to minute (limitation from the official Riot API) so the model would have diffculty spotting patterns in gameplay since our training data lacks detail. 
+
 ### Quantitative Measures
 <!-- A description and justification of the quantitative measure that you are using to evaluate your results. For some problems this will be straightforward. For others, please justify the measure that you chose. -->
+We don't think our model provides meanful results since the model is only outputing the most common target in our data. 
+
 
 ## Justification of Results
 <!-- A justification that your implemented method performed reasonably, given the difficulty of the problem—or a hypothesis for why it doesn’t. This is extremely important. We are looking for an interpretation of the result. You may want to refer to your data summary and hyperparameter choices to make your argument. -->
+
+Looking at the result I don't think our model performs well. I think this is because the lack of difference in training data between high vs low ranked players. Also our training data lacked detail since it is limited by the official Riot API and the model failed to distinguish between high ranked game play from low ranked gameplay. The training data for all ranks showed a similar trend therefore our model is unable to distinguish between high and low elo players. 
 
 ## Ethical Consideration
 We believe that the RNN model we created can be used for both public and professional match evaluation. The evaluation can be done by comparing the ELO rating generated by our model (gELO) to each player actual ELO rating. From the comparison, we can evaluate the match gameplay quality; whether the performance of **all the players** reflect the level of ELO rating they are in right now.  
@@ -94,14 +108,16 @@ An ethical problem will arise when our model is misused to evaluate individual p
 
 1005434558 - Josh Alexander (josh.alexander@mail.utoronto.ca)
 - Put README.md together
-- ..
+- Fixed some issue with the data processing
+- Ethical Consideration
 
-1005426549 - Xinhao Hou (_@mail.utoronto.ca)
+1005426549 - Xinhao Hou (xinhao.hou@mail.utoronto.ca)
 - Created the GitHub repository
-- Wrote and run data collection script <!-- may be better if this replaced by the actual filename -->
+- Wrote and run data collection script (DataCollection folder)
 - Wrote data processing script 
-- ..
+- Hyperparameter Tuning
 
 1004883860 - Zhixuan Yan (zhixuan.yan@mail.utoronto.ca)
 - wrote README.md
-- ..
+- Model Figures
+- Data processing 
